@@ -9,34 +9,39 @@ public class ArraysClone implements Cloneable
 {
 	secondInheritedChild[] source=new secondInheritedChild[2];
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws CloneNotSupportedException
 	{
 		ArraysClone ac = new ArraysClone();
 		
 		ac.source[0] = new secondInheritedChild();
 		ac.source[1] = new secondInheritedChild();
 
-		ac.clone();
-		secondInheritedChild[] cloned = source.clone();
+		ArraysClone cloned = (ArraysClone)ac.clone(ac);
 		
-		for(int i=0;i<cloned.length;i++)
+		for(int i=0;i<cloned.source.length;i++)
 		{
-			cloned[i].childArr[0] = "Sabu";
+			cloned.source[i].childArr[0] = "Sabu";
 		}
-
-		for(int i=0;i< source.length;i++)
+		
+		for(int i=0;i<ac.source.length;i++)
 		{
-			for(int k=0;k< source[i].childArr.length;k++)
-			{
-				System.out.println(source[i].childArr[k]);
-			}
+			System.out.println(ac.source[0].childArr[0]);
 		}
 	}
 	
-	public Object clone() throws CloneNotSupportedException
+	public Object clone(ArraysClone ac) throws CloneNotSupportedException
 	{
 		ArraysClone newAc = (ArraysClone) super.clone();
-		newAc.source = new secondInheritedChild();
+		/*
+		 * What does it mean by intrinsically cloneable? that just means they support cloning internally.
+		 * But you will always need to recreate objects still when you call clone functions like the below
+		 */
+		newAc.source = ac.source.clone();
+		
+		// newAc.source = new secondInheritedChild[2];
+		
+		newAc.source[0] = new secondInheritedChild();
+		newAc.source[1] = new secondInheritedChild();
 		
 		return newAc;
 	}
